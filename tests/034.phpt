@@ -34,13 +34,15 @@ var_dump($result[array_key_first($result)]['free_chunks_end']);
 $slab = array_key_first($result);
 
 foreach ($result as $slab => $_) {
-    $result = $memcache->getStats('cachedump', $slab, 10);
-    if ($result === false) {
+    $cachedump = $memcache->getStats('cachedump', intval($slab), 10);
+    if (!is_array($cachedump)) {
         continue;
     }
 
-    var_dump($result[array_key_first($result)][0]);
-    var_dump($result[array_key_first($result)][1]);
+    var_dump($cachedump[array_key_first($cachedump)][0]);
+    var_dump($cachedump[array_key_first($cachedump)][1]);
+
+    break;
 }
 
 
