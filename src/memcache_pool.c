@@ -36,7 +36,7 @@
 #include "ext/standard/crc32.h"
 #include "ext/standard/php_var.h"
 #include "ext/standard/php_string.h"
-#include "ext/standard/php_smart_string.h"
+#include "Zend/zend_smart_string.h"
 #include "zend_smart_str.h"
 #include "memcache_pool.h"
 
@@ -770,6 +770,9 @@ static int mmc_server_connect(mmc_pool_t *pool, mmc_t *mmc, mmc_stream_t *io, in
 		}
 
 		return MMC_REQUEST_FAILURE;
+	}
+	if (fd >= FD_SETSIZE) {
+		php_error_docref(NULL, E_ERROR, "Too many open file descriptors: %d", fd);
 	}
 	php_stream_auto_cleanup(io->stream);
 	php_stream_set_chunk_size(io->stream, io->chunk_size);
